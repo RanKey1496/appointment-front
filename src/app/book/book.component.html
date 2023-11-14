@@ -1,0 +1,35 @@
+<div fxLayout="column" fxLayoutALign="center" class="container">
+    <div>
+        <mat-checkbox [checked]="isServicioDomicilio">Servicio a domicilio?</mat-checkbox>
+    </div>
+    <div>
+        <mat-form-field class="example-full-width">
+            <mat-label></mat-label>
+            <input type="number"
+                matInput
+                placeholder="Seleccione cantidad de usuarios"
+                min="1"
+                max="5"
+                value="1">
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field class="example-full-width">
+            <mat-label>Seleccione una fecha</mat-label>
+            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #picker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div *ngIf="horasDisponibles">
+        <p>Horas disponibles:</p>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <div *ngFor="let hora of horasDisponibles">
+                <button mat-raised-button color="primary">{{ hora }}</button>
+            </div>
+        </div>
+    </div>
+    <div *ngFor="let service of services">
+        <app-service [name]="service.name" [hour]="service.hour"></app-service>
+    </div>
+</div>
