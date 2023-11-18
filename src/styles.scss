@@ -1,4 +1,71 @@
 /* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: 'proxima-nova', sans-serif;
+  font-size: 18px;
+  font-size: 1.8rem;
+  font-weight: 300;
+  line-height: 1.875;
+}
+
+h1 {
+  padding: 0 1rem;
+}
+
+h2 {
+  padding: 1rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 2rem;
+}
+
+h4 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+h5 {
+  font-size: .875rem;
+  line-height: 1.375rem;
+}
+
+h6 {
+  font-size: .5rem;
+  line-height: 1rem;
+}
+
+.container {
+  padding: 10px;
+  margin: 10px;
+}
+
+.text-gray {
+  color: #767676;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt {
+  margin-top: 1rem;
+}
+
+.warning {
+  color: #ff0000;
+}
+
+.ml {
+  margin-left: 1rem;
+}
+
+.no-margin {
+  margin: 0 0 0 0;
+}
+
+.no-padding {
+  padding: 0 0 0 0;
+}

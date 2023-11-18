@@ -18,8 +18,28 @@ import { MatCardModule } from '@angular/material/card';
 import { HomeComponent } from './home/home.component';
 import { BookComponent } from './book/book.component';
 import { ContactComponent } from './contact/contact.component';
-import { ServiceComponent } from './book/service/service.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatSelectModule} from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatStepperModule} from '@angular/material/stepper';
+import { AddServiceComponent } from './book/add-service/add-service.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ServicesComponent } from './book/services/services.component';
+import { ResultComponent } from './book/result/result.component';
+import { AvailableHourComponent } from './book/available-hour/available-hour.component';
+import { PhoneLoginComponent } from './book/phone-login/phone-login.component';
+import { AngularFireModule } from '@angular/fire/compat';
+import { environment } from 'src/environments/environment';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { LoadingInterceptor } from './loading.interceptor';
+import { TokenInterceptor } from './token.interceptor';
 
 @NgModule({
   declarations: [
@@ -27,13 +47,20 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HomeComponent,
     BookComponent,
     ContactComponent,
-    ServiceComponent
+    AddServiceComponent,
+    ServicesComponent,
+    ResultComponent,
+    AvailableHourComponent,
+    PhoneLoginComponent,
+    SpinnerComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -44,9 +71,22 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatNativeDateModule,
     MatDatepickerModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatTableModule,
+    MatStepperModule,
+    MatSnackBarModule,
+    MatTooltipModule,
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth())
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

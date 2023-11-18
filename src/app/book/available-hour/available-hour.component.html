@@ -1,0 +1,12 @@
+<div fxLayout="row" fxFlexFill>
+  <div fxLayout="column" fxFlexFill>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <h4>Horas disponibles</h4>
+    </div>
+    <div fxLayout="row" fxFlexFill>
+      <div fxLayout="column" *ngFor="let hour of availableHours; let i = index;">
+        <button class="hourButton" [color]="!nonSelected && i === hourIndexClicked ? 'warn' : 'basic'" mat-raised-button (click)="hourClicked(hour, i)">{{ hour }}</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,35 +1,153 @@
-<div fxLayout="column" fxLayoutALign="center" class="container">
-    <div>
-        <mat-checkbox [checked]="isServicioDomicilio">Servicio a domicilio?</mat-checkbox>
-    </div>
-    <div>
-        <mat-form-field class="example-full-width">
-            <mat-label></mat-label>
-            <input type="number"
-                matInput
-                placeholder="Seleccione cantidad de usuarios"
-                min="1"
-                max="5"
-                value="1">
-        </mat-form-field>
-    </div>
-    <div>
-        <mat-form-field class="example-full-width">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker></mat-datepicker>
-        </mat-form-field>
-    </div>
-    <div *ngIf="horasDisponibles">
-        <p>Horas disponibles:</p>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-            <div *ngFor="let hora of horasDisponibles">
-                <button mat-raised-button color="primary">{{ hora }}</button>
-            </div>
+<mat-stepper
+  class="stepper"
+  [orientation]="(stepperOrientation | async)!"
+  linear>
+  <!-- Schedule form -->
+  <mat-step [stepControl]="scheduleFormGroup" label="Información de la cita">
+    <div fxLayout="column" fxLayoutAlign="space-between center" class="container" [formGroup]="scheduleFormGroup">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <button *ngIf="!addServiceClicked" mat-raised-button color="warn" (click)="addService()">Click aquí para agregar un servicio</button>
+      </div>
+      <div fxLayout="row" fxFlexFill *ngIf="addedServices.length > 0">
+        <div fxLayout="column" fxFlexFill>
+          <book-services [services]="addedServicesGrouped" (isHomeService)="isHomeService = $event" (addService)="addService()" (quantityModified)="modifyAddedServicesQuantity($event)"></book-services>
         </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="addServiceClicked">
+        <mat-form-field>
+          <mat-label>Seleccione una fecha</mat-label>
+          <input matInput
+            [min]="minDate"
+            [max]="maxDate"
+            [matDatepicker]="picker"
+            [disabled]="addedServices.length === 0"
+            (dateChange)="onDateChange($event)"
+            formControlName="startDate"
+          >
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxFlexFill *ngIf="availableHours.length > 0">
+        <div fxLayout="column" fxFlexFill>
+          <book-available-hour [availableHours]="availableHours" (showResult)="showResult($event)"></book-available-hour>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlexFill class="mt" *ngIf="result.length > 0">
+        <div fxLayout="column" fxFlexFill>
+          <book-result [result]="resultTotal"></book-result>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt" *ngIf="addServiceClicked">
+        <button mat-raised-button
+          matStepperNext
+        >Siguiente</button>
+      </div>
     </div>
-    <div *ngFor="let service of services">
-        <app-service [name]="service.name" [hour]="service.hour"></app-service>
+  </mat-step>
+
+  <!-- User form -->
+  <mat-step [stepControl]="userFormGroup" label="Verificación de identidad" *ngIf="!user.isAuthenticated">
+    <div fxLayout="column" fxLayoutAlign="space-between center" class="container" [formGroup]="userFormGroup">
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+        <mat-form-field fxFlexFill>
+          <mat-label>Celular</mat-label>
+          <input matInput
+            formControlName="phone"
+            placeholder="Escriba su número"
+            required
+          >
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="!userFormGroup.get('phoneVerified')?.value">
+        <book-phone-login [phoneNumber]="userFormGroup.get('phone')" (verified)="phoneVerifiedSuccessfully($event)"></book-phone-login>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="userFormGroup.get('phoneVerified')?.value">
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <h5>¡Celular verificado exitosamente!</h5>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+              <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+              <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill class="mt" *ngIf="userFormGroup.get('phoneVerified')?.value">
+        <mat-form-field fxFlexFill>
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name" placeholder="Escriba su nombre"
+                  required>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="userFormGroup.get('phoneVerified')?.value">
+        <mat-form-field fxFlexFill>
+          <mat-label>Instagram</mat-label>
+          <input matInput formControlName="instagram" placeholder="Usuario de instagram">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+        <mat-checkbox fxFlexFill
+          formControlName="privacyAcceptance"
+          *ngIf="userFormGroup.get('phoneVerified')?.value"
+        >Acepto las politicas de tratamiento de datos</mat-checkbox>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="signUpError" class="mt">
+        <h5 class="warning">Ocurrió un error, intente nuevamente</h5>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt">
+        <button mat-raised-button matStepperPrevious>Atrás</button>
+        <button mat-raised-button class="ml" [disabled]="!userFormGroup.valid" (click)="saveNewUser()">Siguiente</button>
+      </div>
     </div>
-</div>
+  </mat-step>
+
+  <mat-step label="Verificación de identidad" *ngIf="user.isAuthenticated">
+    <div fxLayout="column" fxLayoutAlign="space-between center" class="container">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <h5>¡Hola {{ user.userData?.name }}!</h5>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+              <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+              <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center" class="mt">
+            <h5>Presiona siguiente para continuar</h5>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt">
+        <button mat-raised-button matStepperPrevious>Atrás</button>
+        <button mat-raised-button class="ml" matStepperNext>Siguiente</button>
+      </div>
+    </div>
+  </mat-step>
+
+  <!-- Payment form -->
+  <mat-step [stepControl]="paymentFormGroup" label="Información de pago">
+    <form [formGroup]="paymentFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput placeholder="Ex. 12345678" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Final form -->
+  <mat-step label="Resumen">
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+    </div>
+  </mat-step>
+</mat-stepper>

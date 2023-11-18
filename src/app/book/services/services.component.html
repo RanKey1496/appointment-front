@@ -1,0 +1,29 @@
+<div fxLayout="row" fxFlexFill>
+  <div fxLayout="column" class="box" fxFlexFill>
+    <div fxLayout="row" fxFlexFill class="headers">
+      <h4 fxFlex="65">Servicio</h4>
+      <h4 fxFlex="35">Cantidad</h4>
+    </div>
+    <div fxLayout="row" fxFlexFill *ngFor="let service of services">
+      <h5 fxFlex="65">{{ service.name }}</h5>
+      <div fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-icon class="icon" fontIcon="remove" (click)="modifyQuantity('remove', service.id)"></mat-icon>
+          <h5 style="margin-bottom: 0;">{{ service.quantity }}</h5>
+          <mat-icon class="icon" fontIcon="add" (click)="modifyQuantity('add', service.id)"></mat-icon>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end" fxFlexFill>
+      <mat-checkbox
+          fxFlex="70"
+          [formControl]="isHomeServiceCheck"
+        >Servicio a domicilio?</mat-checkbox>
+      <button mat-raised-button
+        fxFlex="30"
+        color="warn"
+        (click)="addService.emit()"
+      >Agregar</button>
+    </div>
+  </div>
+</div>
