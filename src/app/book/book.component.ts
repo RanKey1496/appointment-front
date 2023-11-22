@@ -105,13 +105,20 @@ export class BookComponent {
     });
   }
 
-  onDateChange(date: any) {
-    console.log('Consultar horas disponibles')
-    this.availableHours = [
+  onDateChange(event: any) {
+    console.log('Consultar horas disponibles', event.value)
+    try {
+      this.appointmentService.availableHours(event.value).subscribe((data) => {
+        this.availableHours = data.data.availableHours;
+      })
+    } catch (error) {
+      console.log('Error in onDateChange', error);
+    }
+    /*this.availableHours = [
       '10:00 AM',
       '11:00 AM',
       '12:00 PM',
-    ];
+    ];*/
   }
 
   showResult(selectedHour: string) {

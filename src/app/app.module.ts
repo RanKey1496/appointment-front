@@ -20,13 +20,15 @@ import { BookComponent } from './book/book.component';
 import { ContactComponent } from './contact/contact.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatSelectModule} from '@angular/material/select';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule} from '@angular/material/stepper';
 import { AddServiceComponent } from './book/add-service/add-service.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ServicesComponent } from './book/services/services.component';
 import { ResultComponent } from './book/result/result.component';
 import { AvailableHourComponent } from './book/available-hour/available-hour.component';
@@ -78,6 +80,8 @@ import { TokenInterceptor } from './token.interceptor';
     MatStepperModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),

@@ -1,4 +1,4 @@
-.headers>:not(:first-child) {
+.headers > :not(:first-child) {
   padding-left: 1rem;
   border-left: 1px solid rgba(23, 23, 23, 0.06);
 }
@@ -10,17 +10,17 @@
   margin-bottom: 1.5rem;
 }
 
-.box>:not(:first-child) {
+.box > :not(:first-child) {
   border-top: 1px solid rgba(23, 23, 23, 0.06);
   padding-top: 0.5rem;
 }
 
-.box>:last-child {
+.box > :last-child {
   padding-bottom: 0;
   border-left: 0;
 }
 
-.box>* {
+.box > * {
   padding: 0.2rem;
 }
 

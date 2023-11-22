@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { User } from 'src/model/user';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { User } from 'src/model/user';
 })
 export class AppointmentService {
 
-  private appointmentServiceURL = 'http://localhost:3000'
+  private appointmentServiceURL = environment.appointment.url;
 
   constructor(private http: HttpClient) { }
 
@@ -29,6 +30,11 @@ export class AppointmentService {
         Authorization: `Bearer ${token}`
       }
     });
+  }
+
+  availableHours(date: string): Observable<any> {
+    const url = `${this.appointmentServiceURL}/book/available`;
+    return this.http.post(url, { date });
   }
 
 }

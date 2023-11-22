@@ -3,10 +3,17 @@
     <div fxLayout="row" fxLayoutAlign="center center">
       <h4>Horas disponibles</h4>
     </div>
-    <div fxLayout="row" fxFlexFill>
-      <div fxLayout="column" *ngFor="let hour of availableHours; let i = index;">
-        <button class="hourButton" [color]="!nonSelected && i === hourIndexClicked ? 'warn' : 'basic'" mat-raised-button (click)="hourClicked(hour, i)">{{ hour }}</button>
-      </div>
-    </div>
+    <mat-grid-list cols="4" rowHeight="50px">
+      <mat-grid-tile *ngFor="let hour of availableHours; let i = index;"
+      >
+        <button class="hourButton"
+          [color]="!nonSelected && i === hourIndexClicked ? 'warn' : 'primary'"
+          mat-flat-button
+          (click)="hourClicked(hour, i)"
+        >
+          <h5>{{ hour | date: 'shortTime' }}</h5>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
 </div>
