@@ -1,0 +1,144 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.intro {
+  background: url('/assets/images/home/overlay.png'), url('/assets/images/home/intro.png');
+  background-size: 256px 256px, cover;
+  background-attachment: fixed, fixed;
+  background-position: top left, bottom center;
+  background-repeat: repeat, no-repeat;
+}
+
+.intro > * {
+  color: #fff;
+}
+
+.intro > * > h2 {
+  font-weight: 800;
+}
+
+.intro > * > h1 {
+  font-weight: 800;
+  padding: 0;
+  margin: 0;
+}
+
+.intro > * > h4 {
+  padding: 0 3rem;
+  text-align: center;
+}
+
+.down {
+  margin-top: 2em;
+  background-image: url('/assets/css/dark-arrow.svg');
+  border-color: #fff;
+  width: 5em;
+  height: 5em;
+  line-height: 4.5em;
+  padding: 0;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-indent: -10em;
+  overflow: hidden;
+  border: solid 2px #e5e6e7;
+  background-color: transparent;
+  border-radius: 3.5em;
+  cursor: pointer;
+}
+
+.whatido {
+  background: url('/assets/images/home/overlay.png'), url('/assets/images/home/whatido.png');
+  background-size: 256px 256px, cover;
+  background-attachment: fixed, fixed;
+  background-position: top left, bottom center;
+  background-repeat: repeat, no-repeat;
+}
+
+.whatido > .box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 15px 2em 15px;
+  margin: 0 2em;
+  text-align: center;
+}
+
+.whatido > * > h5 {
+  padding: 24 20;
+}
+
+.whoiam {
+  background: url('/assets/images/home/overlay.png'), url('/assets/images/home/whoiam.png');
+  background-size: 256px 256px, cover;
+  background-attachment: fixed, fixed;
+  background-position: top left, bottom center;
+  background-repeat: repeat, no-repeat;
+}
+
+.whoiam > .box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 15px 2em 15px;
+  margin: 0 2em;
+  text-align: center;
+}
+
+.whoiam > * > h5 {
+  padding: 24 20;
+}
+
+.mywork {
+  background: #ffffff;
+}
+
+.mywork > .box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 15px 2em 15px;
+  margin: 0 2em;
+  text-align: center;
+}
+
+.myworkheading {
+  margin-top: 40px;
+}
+
+.myworkheading > h2 {
+  padding-bottom: 0;
+}
+
+.contact {
+  background: #f5f6f7;
+}
+
+.contact > .box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 15px 2em 15px;
+  margin: 0 2em;
+  text-align: center;
+}
+
+.contact > * > h5 {
+  padding: 24 20;
+}
+
+.whatsapp {
+  color: green;
+  line-height: 4.5em;
+  padding: 0;
+  border: 2px solid green;
+  cursor: pointer;
+}
+
+.whatsapp > * {
+  margin-left: 8px;
+}
+
+.instagram {
+  color: #e1306c;
+  line-height: 4.5em;
+  padding: 0;
+  border: 2px solid #e1306c;
+  cursor: pointer;
+}
+
+.instagram > * {
+  margin-left: 8px;
+}

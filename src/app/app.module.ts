@@ -29,6 +29,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ServicesComponent } from './book/services/services.component';
 import { ResultComponent } from './book/result/result.component';
 import { AvailableHourComponent } from './book/available-hour/available-hour.component';
@@ -82,6 +83,7 @@ import { TokenInterceptor } from './token.interceptor';
     MatTooltipModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    MatTabsModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),

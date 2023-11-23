@@ -16,6 +16,7 @@ h1 {
 h2 {
   padding: 1rem;
   font-weight: 500;
+  margin: 0;
 }
 
 h3 {
@@ -42,7 +43,7 @@ h5 {
 h6 {
   font-size: .5rem;
   line-height: 1rem;
-  font-weight: 100;
+  font-weight: 200;
   margin: 0;
 }
 
@@ -77,4 +78,8 @@ h6 {
 
 .no-padding {
   padding: 0 0 0 0;
+}
+
+.text-white {
+  color: #fff;
 }
