@@ -198,4 +198,8 @@ export class BookComponent {
       console.log('Error in signUp', error);
     }
   }
+
+  sendToWhatsapp() {
+    window.open('https://api.whatsapp.com/send?phone=573122818064&text=Hola%2C%20mi%20nombre%20es%20%E2%9C%A8Jhon%20Gil%E2%9C%A8%20y%20realic%C3%A9%20el%20pago%20del%20anticipo%20para%20confirmar%20la%20cita%20*123*%20por%20un%20valor%20de%20%2420.000%0AAdjunto%20comprobante%20%E2%9C%85', '_blank');
+  }
 }

@@ -26,6 +26,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule} from '@angular/material/stepper';
 import { AddServiceComponent } from './book/add-service/add-service.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -78,6 +79,7 @@ import { TokenInterceptor } from './token.interceptor';
     MatDialogModule,
     MatSelectModule,
     MatTableModule,
+    MatExpansionModule,
     MatStepperModule,
     MatSnackBarModule,
     MatTooltipModule,

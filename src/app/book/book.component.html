@@ -130,17 +130,54 @@
   </mat-step>
 
   <!-- Payment form -->
-  <mat-step [stepControl]="paymentFormGroup" label="Información de pago">
-    <form [formGroup]="paymentFormGroup">
-      <mat-form-field>
-        <mat-label>Phone number</mat-label>
-        <input matInput placeholder="Ex. 12345678" required>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+  <mat-step [stepControl]="paymentFormGroup" label="Pago del servicio">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" fxFlexFill>
+        <mat-accordion class="mt">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'">
+              <mat-panel-title>
+                Bancolombia o Nequi
+              </mat-panel-title>
+              <mat-panel-description>
+                Paga y envía el comprobante (Sin recargo)
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div fxLayout="column" fxFlexFill>
+              <div fxLayout="row" fxFlexFill>
+                <h3>Bancolombia</h3>
+              </div>
+              <div fxLayout="row" fxFlexFill>
+                <h5>Cuenta de ahorros: 584-177304-92</h5>
+              </div>
+              <div fxLayout="row" fxFlexFill>
+                <h3>Nequi</h3>
+              </div>
+              <div fxLayout="row" fxFlexFill>
+                <h5>3122818064</h5>
+              </div>
+              <div fxLayout="row" class="mt" fxFlexFill>
+                <button mat-raised-button (click)="sendToWhatsapp()">Enviar a Whatsapp</button>
+              </div>
+              <div fxLayout="row" class="mt" fxFlexFill>
+                <h5>Envía el comprobante del pago al whatsapp para nosotros verificar la transacción (Esto puede tardar un momento)</h5>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel disabled>
+            <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'">
+              <mat-panel-title>
+                Wompi
+              </mat-panel-title>
+              <mat-panel-description>
+                PSE, Bancolombia, Nequi, etc (Recargo del 4%)
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p class="warning">Estamos trabajando para habilitar este tipo de pago, utiliza otro disponible</p>
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
-    </form>
+    </div>
   </mat-step>
 
   <!-- Final form -->
