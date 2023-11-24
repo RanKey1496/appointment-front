@@ -4,17 +4,17 @@
   linear>
   <!-- Schedule form -->
   <mat-step [stepControl]="scheduleFormGroup" label="Información de la cita">
-    <div fxLayout="column" fxLayoutAlign="space-between center" class="container" [formGroup]="scheduleFormGroup">
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <button *ngIf="!addServiceClicked" mat-raised-button color="warn" (click)="addService()">Click aquí para agregar un servicio</button>
+    <div fxLayout="column" fxLayoutAlign="space-between center" class="container" [formGroup]="scheduleFormGroup" fxFlexFill>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+        <button *ngIf="!addServiceClicked" mat-raised-button color="warn" (click)="addService()" fxFlexFill>Click aquí para agregar un servicio</button>
       </div>
       <div fxLayout="row" fxFlexFill *ngIf="addedServices.length > 0">
         <div fxLayout="column" fxFlexFill>
           <book-services [services]="addedServicesGrouped" (isHomeService)="isHomeService = $event" (addService)="addService()" (quantityModified)="modifyAddedServicesQuantity($event)"></book-services>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="addServiceClicked">
-        <mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="addServiceClicked" fxFlexFill>
+        <mat-form-field fxFlexFill>
           <mat-label>Seleccione una fecha</mat-label>
           <input matInput
             [min]="minDate"
@@ -30,7 +30,7 @@
       </div>
       <div fxLayout="row" fxFlexFill *ngIf="availableHours.length > 0">
         <div fxLayout="column" fxFlexFill>
-          <book-available-hour [availableHours]="availableHours" (showResult)="showResult($event)"></book-available-hour>
+          <book-available-hour [availableHours]="availableHours" (showResult)="showResult($event)" fxFlexFill></book-available-hour>
         </div>
       </div>
       <div fxLayout="row" fxFlexFill class="mt" *ngIf="result.length > 0">
@@ -132,12 +132,18 @@
   <!-- Payment form -->
   <mat-step [stepControl]="paymentFormGroup" label="Pago del servicio">
     <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" class="mt" fxFlexFill>
+        <h5>Para poder confirmar la cita, debes realizar el pago del anticipo (20% del total)</h5>
+      </div>
+      <div fxLayout="row" fxFlexFill>
+        <h6 class="warning">Hasta que no se realice el pago no se garantizará que la cita está confirmada y los horarios podrán ser tomados por otro usuario en cualquier momento</h6>
+      </div>
       <div fxLayout="row" fxFlexFill>
         <mat-accordion class="mt">
           <mat-expansion-panel>
             <mat-expansion-panel-header [collapsedHeight]="'100px'" [expandedHeight]="'100px'">
               <mat-panel-title>
-                Bancolombia o Nequi
+                Transferencia
               </mat-panel-title>
               <mat-panel-description>
                 Paga y envía el comprobante (Sin recargo)
@@ -160,7 +166,7 @@
                 <button mat-raised-button (click)="sendToWhatsapp()">Enviar a Whatsapp</button>
               </div>
               <div fxLayout="row" class="mt" fxFlexFill>
-                <h5>Envía el comprobante del pago al whatsapp para nosotros verificar la transacción (Esto puede tardar un momento)</h5>
+                <h6>Envía el comprobante de pago a Whatsapp para verificar la transacción (Esto puede tardar un momento)</h6>
               </div>
             </div>
           </mat-expansion-panel>
@@ -177,14 +183,6 @@
           </mat-expansion-panel>
         </mat-accordion>
       </div>
-    </div>
-  </mat-step>
-
-  <!-- Final form -->
-  <mat-step label="Resumen">
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
     </div>
   </mat-step>
 </mat-stepper>
