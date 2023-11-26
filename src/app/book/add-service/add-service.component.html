@@ -3,7 +3,7 @@
   <h4>Que servicio desea agendar?</h4>
   <mat-form-field>
     <mat-label>Servicios</mat-label>
-    <mat-select (selectionChange)="onSelect($event.value)">
+    <mat-select (selectionChange)="onSelect($event.value)" #select>
       <mat-option *ngFor="let service of services" [value]="service">{{ service.name }}</mat-option>
     </mat-select>
   </mat-form-field>

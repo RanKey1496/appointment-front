@@ -13,6 +13,8 @@ import { MatStepper } from '@angular/material/stepper';
 import { AuthService } from '../auth.service';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { PaymentTransferMethodComponent } from './payment-transfer-method/payment-transfer-method.component';
+import { MatInput } from '@angular/material/input';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-book',
@@ -35,6 +37,7 @@ export class BookComponent {
   unavailableHours: boolean = false;
   resultTotal: any;
 
+  @ViewChild('bookAvailableHours') bookAvailableHours: any;
   scheduleFormGroup = this.formBuilder.group({
     startDate: [Date, Validators.required],
     filled: [false, Validators.requiredTrue]
@@ -76,6 +79,12 @@ export class BookComponent {
     this.appointmentService.allServices().subscribe(services => {
       this.services = services.data;
     });
+  }
+
+  scrollToView(target: HTMLElement) {
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 500);
   }
 
   groupBy(input: any, key: string) {
