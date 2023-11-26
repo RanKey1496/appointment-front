@@ -37,4 +37,14 @@ export class AppointmentService {
     return this.http.post(url, { date });
   }
 
+  availableHoursByType(date: string, type: string, ids: number[]): Observable<any> {
+    const url = `${this.appointmentServiceURL}/book/available/type`;
+    return this.http.post(url, { date, type, ids });
+  }
+
+  allServices(): Observable<any> {
+    const url = `${this.appointmentServiceURL}/service`;
+    return this.http.get(url);
+  }
+
 }

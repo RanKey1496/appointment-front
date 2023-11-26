@@ -3,9 +3,11 @@
     <div fxLayout="row" fxLayoutAlign="center center">
       <h4>Horas disponibles</h4>
     </div>
-    <mat-tab-group fxFlexFill>
+    <mat-tab-group (selectedTabChange)="tabSelected($event)" fxFlexFill>
       <mat-tab label="Iniciar a las" fxFlexFill>
-        <h5>Quiero iniciar el servicio a esta hora:</h5>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <h4 class="warning mt">Quiero iniciar el servicio a esta hora:</h4>
+        </div>
         <mat-grid-list cols="3" rowHeight="50px" fxFlexFill>
           <mat-grid-tile *ngFor="let hour of availableHours; let i = index;"
           >
@@ -19,8 +21,10 @@
           </mat-grid-tile>
         </mat-grid-list>
       </mat-tab>
-      <mat-tab label="Estar list@ a las" fxFlexFill>
-        <h5>Necesito haber finalizado a esta hora:</h5>
+      <mat-tab label="Finalizar a las" fxFlexFill>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <h4 class="warning mt">Quiero finalizar el servicio a esta hora:</h4>
+        </div>
         <mat-grid-list cols="3" rowHeight="50px">
           <mat-grid-tile *ngFor="let hour of availableHours; let i = index;"
           >
@@ -29,7 +33,7 @@
               mat-flat-button
               (click)="hourClicked(hour, i)"
             >
-              {{ hour | date: 'hh a' }}
+              {{ hour | date: 'shortTime' }}
             </button>
           </mat-grid-tile>
         </mat-grid-list>

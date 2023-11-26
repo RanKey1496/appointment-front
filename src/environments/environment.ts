@@ -6,6 +6,7 @@ export const environment = {
     projectId: "appointment-65ee8"
   },
   appointment: {
+    //url: 'http://localhost:3000'
     url: 'https://appointment-service-dev-fjnq.4.us-1.fl0.io'
   }
 };

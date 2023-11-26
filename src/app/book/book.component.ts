@@ -20,6 +20,7 @@ import { AuthService } from '../auth.service';
 export class BookComponent {
   stepperOrientation: Observable<StepperOrientation>;
 
+  services: any = [];
   addServiceClicked: boolean = false;
   addedServices: any = [];
   addedServicesGrouped: any = [];
@@ -27,13 +28,14 @@ export class BookComponent {
   minDate: Date = moment().add('1', 'd').toDate();
   maxDate: Date = moment().add(15, 'd').toDate();
   date: Date | null = new Date();
+  typeOfRequest: string = 'starts';
   availableHours: string[] = [];
-  result: any = [];
+  unavailableHours: boolean = false;
   resultTotal: any;
 
   scheduleFormGroup = this.formBuilder.group({
-    // startDate: [null, Validators.required]
-    startDate: [null]
+    startDate: [Date, Validators.required],
+    filled: [false, Validators.requiredTrue]
   });
 
   @ViewChild(MatStepper) stepper!: MatStepper;
@@ -66,7 +68,10 @@ export class BookComponent {
       if (loggedIn) {
         this.user = this.authService.isAuthenticatedUser();
       }
-    })
+    });
+    this.appointmentService.allServices().subscribe(services => {
+      this.services = services.data;
+    });
   }
 
   groupBy(input: any, key: string) {
@@ -85,72 +90,105 @@ export class BookComponent {
     const grouped = this.groupBy(this.addedServices, 'id');
     const result = [];
     for (const id in grouped) {
-      const value = { id, name: grouped[id][0].name, quantity: grouped[id].length }
+      const price = grouped[id].reduce((acc: number, curr: any) => acc + curr.price, 0);
+      const value = { id, name: grouped[id][0].name, quantity: grouped[id].length, price };
       result.push(value);
     }
     this.addedServicesGrouped = result;
   }
 
+  getPriceTotal() {
+    return this.addedServicesGrouped.reduce((acc: number, curr: any) => acc + curr.price, 0);
+  }
+
   addService() {
-    const dialogRef = this.dialog.open(AddServiceComponent, {});
+    const dialogRef = this.dialog.open(AddServiceComponent, {
+      data: this.services
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
-      this.result = [];
       this.availableHours = [];
       this.scheduleFormGroup.patchValue({ startDate: null });
       this.addedServices.push(result);
       if (!this.addServiceClicked) this.addServiceClicked = true;
       this.getServicesGrouped();
+      this.resultTotal = null;
     });
   }
 
-  onDateChange(event: any) {
-    console.log('Consultar horas disponibles', event.value)
+  getAvailableHours() {
     try {
-      this.appointmentService.availableHours(event.value).subscribe((data) => {
-        this.availableHours = data.data.availableHours;
-      })
+      const ids = this.addedServices.map((x: any) => x.id);
+      const date: any = this.scheduleFormGroup.get('startDate')!.value;
+      this.appointmentService.availableHoursByType(
+        moment(date).format(),
+        this.typeOfRequest, ids)
+      .subscribe((data) => {
+        if (data.data.availableHours.length === 0) {
+          this.unavailableHours = true;
+          this.scheduleFormGroup.get('filled')?.setValue(false);
+        } else {
+          this.availableHours = data.data.availableHours;
+          this.unavailableHours = false;
+        }
+      });
     } catch (error) {
-      console.log('Error in onDateChange', error);
+      console.log('Error in getAvailableHours', error);
     }
-    /*this.availableHours = [
-      '10:00 AM',
-      '11:00 AM',
-      '12:00 PM',
-    ];*/
+  }
+
+  onDateChange() {
+    this.getAvailableHours();
+    this.resultTotal = null;
+  }
+
+  onTypeTapeChange(event: any) {
+    if (event.index === 0) {
+      this.typeOfRequest = 'starts';
+    } else {
+      this.typeOfRequest = 'ends';
+    }
+    this.getAvailableHours();
+    this.resultTotal = null;
+  }
+
+  generateTotal(duration: number, startDate: any, endDate: any) {
+    return {
+      name: `${this.addedServices.length} servicio(s)`,
+      duration: duration,
+      displayDuration: humanizeDuration(duration * 60 * 1000, { language: 'es' }),
+      startDate,
+      endDate
+    };
   }
 
   showResult(selectedHour: string) {
-    const time = moment(selectedHour, 'hh:mm A');
-    const startDate = moment(this.date);
-    startDate.set({
-      hour: time.get('hour'),
-      minute: time.get('minute'),
-      second: 0
-    });
-    let lastDate = moment(startDate);
-    this.result = this.addedServices.map((s: any) => {
-      const startDate = lastDate.toDate();
-      const endDate = moment(startDate);
-      endDate.add(s.duration, 'minute');
-      const result = {
-        name: s.name,
-        duration: s.duration,
-        startDate,
-        endDate: endDate.toDate()
-      };
-      lastDate = endDate;
-      return result;
-    });
-    const totalDuration = this.result.reduce((acc: any, cur: any) => acc + cur.duration, 0)
-    this.resultTotal = {
-      name: `${this.result.length} servicio(s)`,
-      duration: totalDuration,
-      displayDuration: humanizeDuration(totalDuration * 60 * 1000, { language: 'es' }),
-      startDate,
-      endDate: lastDate
+    const time = moment(selectedHour);
+    const date: any = this.scheduleFormGroup.get('startDate')!.value;
+    const duration = this.addedServices.reduce((acc: number, curr: any) => acc + curr.duration, 0);
+    if (this.typeOfRequest === 'starts') {
+      const startDate = moment(date);
+      startDate.set({
+        hour: time.get('hour'),
+        minute: time.get('minute'),
+        second: 0
+      });
+      let endDate = moment(startDate);
+      endDate.add(duration, 'minutes');
+      this.resultTotal = this.generateTotal(duration, startDate, endDate);
+    } else {
+      const endDate = moment(date);
+      endDate.set({
+        hour: time.get('hour'),
+        minute: time.get('minute'),
+        second: 0
+      });
+      let startDate = moment(endDate);
+      startDate.subtract(duration, 'minutes');
+      this.resultTotal = this.generateTotal(duration, startDate, endDate);
     }
+    this.scheduleFormGroup.get('filled')?.setValue(true);
   }
 
   modifyAddedServicesQuantity(data: { event: string, id: number }) {
@@ -162,11 +200,12 @@ export class BookComponent {
     if (data.event === 'remove') {
       this.addedServices.splice(index, 1)
     }
-    this.result = [];
     this.availableHours = [];
     this.scheduleFormGroup.patchValue({ startDate: null });
     this.getServicesGrouped();
     if (this.addedServices.length === 0) this.addServiceClicked = false;
+    this.typeOfRequest = 'starts';
+    this.resultTotal = null;
   }
 
   phoneVerifiedSuccessfully(data: { firebaseUid: string, accessToken: string }) {

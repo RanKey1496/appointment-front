@@ -17,23 +17,28 @@
         <mat-form-field fxFlexFill>
           <mat-label>Seleccione una fecha</mat-label>
           <input matInput
+            #input
+            (focus)="picker.open()"
             [min]="minDate"
             [max]="maxDate"
             [matDatepicker]="picker"
             [disabled]="addedServices.length === 0"
-            (dateChange)="onDateChange($event)"
+            (dateChange)="onDateChange()"
             formControlName="startDate"
           >
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker touchUi #picker></mat-datepicker>
+          <mat-datepicker touchUi #picker (closed)="input.blur()"></mat-datepicker>
         </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="unavailableHours">
+        <h4 class="mt">Lo sentimos, no tenemos disponibilidad para este día con la cantidad de servicios seleccionados</h4>
       </div>
       <div fxLayout="row" fxFlexFill *ngIf="availableHours.length > 0">
         <div fxLayout="column" fxFlexFill>
-          <book-available-hour [availableHours]="availableHours" (showResult)="showResult($event)" fxFlexFill></book-available-hour>
+          <book-available-hour [availableHours]="availableHours" (tabChanged)="onTypeTapeChange($event)" (showResult)="showResult($event)" fxFlexFill></book-available-hour>
         </div>
       </div>
-      <div fxLayout="row" fxFlexFill class="mt" *ngIf="result.length > 0">
+      <div fxLayout="row" fxFlexFill class="mt" *ngIf="resultTotal">
         <div fxLayout="column" fxFlexFill>
           <book-result [result]="resultTotal"></book-result>
         </div>
@@ -41,6 +46,7 @@
       <div fxLayout="row" fxLayoutAlign="center center" class="mt" *ngIf="addServiceClicked">
         <button mat-raised-button
           matStepperNext
+          [disabled]="!scheduleFormGroup.valid"
         >Siguiente</button>
       </div>
     </div>
@@ -125,6 +131,55 @@
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
         <button mat-raised-button matStepperPrevious>Atrás</button>
         <button mat-raised-button class="ml" matStepperNext>Siguiente</button>
+      </div>
+    </div>
+  </mat-step>
+
+  <!-- Resumen form -->
+  <mat-step label="Resumen del servicio">
+    <div fxLayout="column" fxFlexFill>
+      <div fxLayout="row" class="mt">
+        <h2>Resumen de la Orden</h2>
+      </div>
+      <div fxLayout="row" fxFlexFill>
+        <h5>{{ addedServices.length }} servicios(s)</h5>
+      </div>
+      <div fxLayout="row" fxFlexFill *ngFor="let g of addedServicesGrouped">
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <h4>{{ g.name }}</h4>
+          </div>
+        </div>
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <h4>Cantidad: {{ g.quantity }}</h4>
+          </div>
+        </div>
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <h4>Valor: {{ g.price }}</h4>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlexFill>
+        <div fxLayout="column">
+          <h4>Subtotal: </h4>
+        </div>
+        <div>
+          <h4><strong>{{ getPriceTotal() }}</strong></h4>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlexFill>
+        <div fxLayout="column">
+          <h4>Anticipo: </h4>
+        </div>
+        <div>
+          <h4><strong>{{ getPriceTotal() * 0.2 }}</strong></h4>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt">
+        <button mat-raised-button matStepperPrevious>Atrás</button>
+        <button mat-raised-button color="primary" class="ml" matStepperNext>Continuar con el pago</button>
       </div>
     </div>
   </mat-step>

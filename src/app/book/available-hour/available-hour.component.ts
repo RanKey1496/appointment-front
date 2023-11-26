@@ -9,6 +9,7 @@ export class AvailableHourComponent {
 
   @Input() availableHours: string[] | null = null;
   @Input() nonSelected: boolean = false;
+  @Output() tabChanged = new EventEmitter();
   @Output() showResult = new EventEmitter();
 
   hourIndexClicked: number | null = null;
@@ -16,6 +17,11 @@ export class AvailableHourComponent {
   hourClicked(value: any, index: number) {
     this.hourIndexClicked = index;
     this.showResult.emit(value)
+  }
+
+  tabSelected($event: any) {
+    this.tabChanged.emit($event);
+    this.hourIndexClicked = null;
   }
 
 }
