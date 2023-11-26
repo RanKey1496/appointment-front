@@ -1,9 +1,9 @@
 <mat-stepper
   class="stepper"
   [orientation]="(stepperOrientation | async)!"
-  linear>
+  [linear]="false">
   <!-- Schedule form -->
-  <mat-step [stepControl]="scheduleFormGroup" label="Información de la cita">
+  <mat-step [stepControl]="scheduleFormGroup" label="Información de la cita" [editable]="editable">
     <div fxLayout="column" fxLayoutAlign="space-between center" class="container" [formGroup]="scheduleFormGroup" fxFlexFill>
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
         <button *ngIf="!addServiceClicked" mat-raised-button color="warn" (click)="addService()" fxFlexFill>Click aquí para agregar un servicio</button>
@@ -53,7 +53,7 @@
   </mat-step>
 
   <!-- User form -->
-  <mat-step [stepControl]="userFormGroup" label="Verificación de identidad" *ngIf="!user.isAuthenticated">
+  <mat-step [stepControl]="userFormGroup" label="Verificación de identidad" [editable]="editable" *ngIf="!user.isAuthenticated">
     <div fxLayout="column" fxLayoutAlign="space-between center" class="container" [formGroup]="userFormGroup">
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
         <mat-form-field fxFlexFill>
@@ -110,7 +110,7 @@
     </div>
   </mat-step>
 
-  <mat-step label="Verificación de identidad" *ngIf="user.isAuthenticated">
+  <mat-step label="Verificación de identidad" [editable]="editable" *ngIf="user.isAuthenticated">
     <div fxLayout="column" fxLayoutAlign="space-between center" class="container">
       <div fxLayout="row" fxLayoutAlign="center center">
         <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
@@ -136,50 +136,57 @@
   </mat-step>
 
   <!-- Resumen form -->
-  <mat-step label="Resumen del servicio">
-    <div fxLayout="column" fxFlexFill>
+  <mat-step label="Resumen" [editable]="editable">
+    <div fxLayout="column" class="resumen-container">
       <div fxLayout="row" class="mt">
-        <h2>Resumen de la Orden</h2>
+        <h3>Resumen de la Orden</h3>
       </div>
-      <div fxLayout="row" fxFlexFill>
+      <div fxLayout="row" class="mb" fxFlexFill>
         <h5>{{ addedServices.length }} servicios(s)</h5>
       </div>
-      <div fxLayout="row" fxFlexFill *ngFor="let g of addedServicesGrouped">
-        <div fxLayout="column">
-          <div fxLayout="row">
-            <h4>{{ g.name }}</h4>
+      <mat-divider></mat-divider>
+      <div fxLayout="column">
+        <div fxLayout="row" class="box" fxFlexFill *ngFor="let g of addedServicesGrouped">
+          <div fxLayout="column" fxFlex="70">
+            <div fxLayout="row" fxLayoutAlign="start start">
+              <h5>{{ g.name }}</h5>
+            </div>
           </div>
-        </div>
-        <div fxLayout="column">
-          <div fxLayout="row">
-            <h4>Cantidad: {{ g.quantity }}</h4>
-          </div>
-        </div>
-        <div fxLayout="column">
-          <div fxLayout="row">
-            <h4>Valor: {{ g.price }}</h4>
+          <div fxLayout="column" fxFlex="30">
+            <div fxLayout="row"  fxLayoutAlign="end start">
+              <h5>Cantidad: {{ g.quantity }}</h5>
+            </div>
+            <div fxLayout="row"  fxLayoutAlign="end start">
+              <h5>{{ g.price | currency : 'COP' : '$' : '3.0' }}</h5>
+            </div>
           </div>
         </div>
       </div>
-      <div fxLayout="row" fxFlexFill>
-        <div fxLayout="column">
-          <h4>Subtotal: </h4>
+      <mat-divider></mat-divider>
+      <div fxLayout="row" class="mt" fxFlexFill>
+        <div fxLayout="column" fxFlex="70">
+          <div fxLayout="row" fxLayoutAlign="start start">
+            <h4>Total</h4>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start start">
+            <h4>Anticipo</h4>
+          </div>
         </div>
-        <div>
-          <h4><strong>{{ getPriceTotal() }}</strong></h4>
-        </div>
-      </div>
-      <div fxLayout="row" fxFlexFill>
-        <div fxLayout="column">
-          <h4>Anticipo: </h4>
-        </div>
-        <div>
-          <h4><strong>{{ getPriceTotal() * 0.2 }}</strong></h4>
+        <div fxLayout="column" fxFlex="30">
+          <div fxLayout="row" fxLayoutAlign="end start">
+            <h5><strong>{{ getPriceTotal() | currency : 'COP' : '$' : '3.0' }}</strong></h5>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="end start">
+            <h5><strong>{{ getPriceTotal() * 0.2 | currency : 'COP' : '$' : '3.0' }}</strong></h5>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="end start">
+            <h6 class="warning">(20% del total)</h6>
+          </div>
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
         <button mat-raised-button matStepperPrevious>Atrás</button>
-        <button mat-raised-button color="primary" class="ml" matStepperNext>Continuar con el pago</button>
+        <button mat-raised-button color="warn" class="ml" (click)="areYouSure()">Continuar con el pago</button>
       </div>
     </div>
   </mat-step>
@@ -187,7 +194,7 @@
   <!-- Payment form -->
   <mat-step [stepControl]="paymentFormGroup" label="Pago del servicio">
     <div fxLayout="column" fxFlexFill>
-      <div fxLayout="row" class="mt" fxFlexFill>
+      <div fxLayout="row" class="mt" fxLayoutAlign="center center" fxFlexFill>
         <h5>Para poder confirmar la cita, debes realizar el pago del anticipo (20% del total)</h5>
       </div>
       <div fxLayout="row" fxFlexFill>
@@ -206,19 +213,23 @@
             </mat-expansion-panel-header>
             <div fxLayout="column" fxFlexFill>
               <div fxLayout="row" fxFlexFill>
-                <h3>Bancolombia</h3>
+                <div fxLayout="column" fxFlex="50">
+                  <img (click)="openPaymentTransfer('bancolombia')" src="/assets/images/book/bancolombia.png" />
+                </div>
+                <div fxLayout="column" fxFlex="50">
+                  <img (click)="openPaymentTransfer('nequi')" src="/assets/images/book/nequi.png" />
+                </div>
               </div>
               <div fxLayout="row" fxFlexFill>
-                <h5>Cuenta de ahorros: 584-177304-92</h5>
-              </div>
-              <div fxLayout="row" fxFlexFill>
-                <h3>Nequi</h3>
-              </div>
-              <div fxLayout="row" fxFlexFill>
-                <h5>3122818064</h5>
+                <div fxLayout="column" fxFlex="50">
+                  <button mat-raised-button color="primary" (click)="openPaymentTransfer('bancolombia')">Ver datos</button>
+                </div>
+                <div fxLayout="column" fxFlex="50">
+                  <button mat-raised-button color="primary" (click)="openPaymentTransfer('nequi')">Ver datos</button>
+                </div>
               </div>
               <div fxLayout="row" class="mt" fxFlexFill>
-                <button mat-raised-button (click)="sendToWhatsapp()">Enviar a Whatsapp</button>
+                <button fxFlexFill mat-raised-button color="primary" (click)="sendToWhatsapp()">Enviar a Whatsapp</button>
               </div>
               <div fxLayout="row" class="mt" fxFlexFill>
                 <h6>Envía el comprobante de pago a Whatsapp para verificar la transacción (Esto puede tardar un momento)</h6>

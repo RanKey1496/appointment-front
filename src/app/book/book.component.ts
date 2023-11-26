@@ -11,6 +11,8 @@ import { User } from 'src/model/user';
 import { AppointmentService } from '../appointment.service';
 import { MatStepper } from '@angular/material/stepper';
 import { AuthService } from '../auth.service';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { PaymentTransferMethodComponent } from './payment-transfer-method/payment-transfer-method.component';
 
 @Component({
   selector: 'app-book',
@@ -50,6 +52,8 @@ export class BookComponent {
   });
   firebaseAccessToken!: string;
   user!: { isAuthenticated: boolean, userData: any };
+
+  editable: boolean = true;
 
   paymentFormGroup = this.formBuilder.group({
 
@@ -236,6 +240,27 @@ export class BookComponent {
       this.signUpError = true;
       console.log('Error in signUp', error);
     }
+  }
+
+  areYouSure() {
+    const dialogRef = this.dialog.open(ConfirmComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.stepper.next();
+      this.editable = false;
+    });
+  }
+
+  openPaymentTransfer(method: string) {
+    const dialogRef = this.dialog.open(PaymentTransferMethodComponent, {
+      data: { method }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.sendToWhatsapp();
+    })
   }
 
   sendToWhatsapp() {

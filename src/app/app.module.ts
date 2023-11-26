@@ -31,6 +31,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
 import { ServicesComponent } from './book/services/services.component';
 import { ResultComponent } from './book/result/result.component';
 import { AvailableHourComponent } from './book/available-hour/available-hour.component';
@@ -44,6 +45,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { LoadingInterceptor } from './loading.interceptor';
 import { TokenInterceptor } from './token.interceptor';
+import { ConfirmComponent } from './book/confirm/confirm.component';
+import { PaymentTransferMethodComponent } from './book/payment-transfer-method/payment-transfer-method.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,9 @@ import { TokenInterceptor } from './token.interceptor';
     ResultComponent,
     AvailableHourComponent,
     PhoneLoginComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ConfirmComponent,
+    PaymentTransferMethodComponent
   ],
   imports: [
     HttpClientModule,
@@ -78,6 +83,7 @@ import { TokenInterceptor } from './token.interceptor';
     MatCardModule,
     MatDialogModule,
     MatSelectModule,
+    MatDividerModule,
     MatTableModule,
     MatExpansionModule,
     MatStepperModule,
