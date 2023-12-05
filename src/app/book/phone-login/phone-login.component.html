@@ -3,23 +3,23 @@
   <div fxLayout="row" fxLayoutAlign="center center" *ngIf="!codeSent">
     <button mat-raised-button color="warn" (click)="sendLoginCode()" [disabled]="!phoneNumber?.valid">Verificar celular</button>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="windowRef.confirmationResult && codeSent && resendCodeTime === ''">
-    <h5>¡Hemos enviado un SMS a su número de celular!</h5>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="codeSent && resendCodeTime === ''">
+    <h5>¡Te enviamos un código a Whatsapp!</h5>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="windowRef.confirmationResult && codeSent && resendCodeTime !== ''">
-    <h5>¿No lo ha recibido? Genere uno nuevo en {{ resendCodeTime }}</h5>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="codeSent && resendCodeTime !== ''">
+    <h6>¿No lo ha recibido? Genere uno nuevo en {{ resendCodeTime }}</h6>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center center" *ngIf="windowRef.confirmationResult && codeSent">
+  <div fxLayout="row" fxLayoutAlign="center center" class="mt" *ngIf="codeSent">
     <mat-form-field>
       <mat-label>Código de verificación</mat-label>
       <input matInput [formControl]="code" placeholder="Ingrese el código"
-             required>
+        [showMaskTyped]="true" required mask="0 0 0 0 0 0">
     </mat-form-field>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="invalidCode && codeSent">
+  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill class="mtb" *ngIf="invalidCode && codeSent">
     <h5 class="warning">Código inválido</h5>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center center" *ngIf="windowRef.confirmationResult && codeSent">
+  <div fxLayout="row" fxLayoutAlign="center center" *ngIf="codeSent">
     <button mat-raised-button color="warn" (click)="verifyLoginCode()">Verificar código</button>
   </div>
 </div>

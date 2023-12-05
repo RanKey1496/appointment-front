@@ -47,6 +47,7 @@ import { LoadingInterceptor } from './loading.interceptor';
 import { TokenInterceptor } from './token.interceptor';
 import { ConfirmComponent } from './book/confirm/confirm.component';
 import { PaymentTransferMethodComponent } from './book/payment-transfer-method/payment-transfer-method.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -95,11 +96,14 @@ import { PaymentTransferMethodComponent } from './book/payment-transfer-method/p
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    provideNgxMask()
   ],
   bootstrap: [AppComponent]
 })

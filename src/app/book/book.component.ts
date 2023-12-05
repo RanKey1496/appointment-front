@@ -49,11 +49,10 @@ export class BookComponent {
     name: ['', [Validators.required, Validators.minLength(5)]],
     phone: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
     instagram: [''],
-    firebaseUid: [''],
     phoneVerified: [false, [Validators.requiredTrue]],
+    details: [''],
     privacyAcceptance: [false, [Validators.requiredTrue]]
   });
-  firebaseAccessToken!: string;
   user!: { isAuthenticated: boolean, userData: any };
 
   editable: boolean = true;
@@ -221,13 +220,12 @@ export class BookComponent {
     this.resultTotal = null;
   }
 
-  phoneVerifiedSuccessfully(data: { firebaseUid: string, accessToken: string }) {
+  phoneVerifiedSuccessfully(details: string) {
     this.userFormGroup.patchValue({
       phoneVerified: true,
-      firebaseUid: data.firebaseUid
+      details
     });
     this.userFormGroup.get('phone')?.disable();
-    this.firebaseAccessToken = data.accessToken;
   }
 
   saveNewUser() {
@@ -238,12 +236,14 @@ export class BookComponent {
     user.name = this.userFormGroup.controls['name'].value!;
     user.phone = `+57${this.userFormGroup.controls['phone'].value!}`;
     user.instagram = this.userFormGroup.controls['instagram'].value!;
-    user.firebaseUid = this.userFormGroup.controls['firebaseUid'].value!;
+    user.details = this.userFormGroup.controls['details'].value!;
 
     try {
       this.appointmentService.signUp(user).subscribe((data) => {
-        this.stepper.next();
-        this.authService.loginUserWithFirebaseToken(this.firebaseAccessToken);
+        if (data.data) {
+          this.authService.authenticateToken(data.data);
+          this.stepper.next();
+        }
       });
     } catch (error) {
       this.signUpError = true;

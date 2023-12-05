@@ -59,10 +59,16 @@
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
         <mat-form-field fxFlexFill>
           <mat-label>Celular</mat-label>
+          <button mat-icon-button matPrefix>
+            <span class="flag-icon flag-icon-co flag-icon-squared"></span>
+          </button>
           <input matInput
             formControlName="phone"
             placeholder="Escriba su número"
             required
+            prefix="+57 "
+            [showMaskTyped]="true"
+            mask="(000) 000-0000"
           >
         </mat-form-field>
       </div>
@@ -92,7 +98,7 @@
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="userFormGroup.get('phoneVerified')?.value">
         <mat-form-field fxFlexFill>
           <mat-label>Instagram</mat-label>
-          <input matInput formControlName="instagram" placeholder="Usuario de instagram">
+          <input matInput formControlName="instagram" prefix="@ " placeholder="Usuario de instagram">
         </mat-form-field>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
@@ -106,7 +112,7 @@
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
         <button mat-raised-button matStepperPrevious>Atrás</button>
-        <button mat-raised-button class="ml" [disabled]="!userFormGroup.valid" (click)="saveNewUser()">Siguiente</button>
+        <button mat-raised-button class="ml" [disabled]="!userFormGroup.valid" color="warn" (click)="saveNewUser()">Siguiente</button>
       </div>
     </div>
   </mat-step>
@@ -131,7 +137,7 @@
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
         <button mat-raised-button matStepperPrevious>Atrás</button>
-        <button mat-raised-button class="ml" matStepperNext>Siguiente</button>
+        <button mat-raised-button class="ml" color="warn" matStepperNext>Siguiente</button>
       </div>
     </div>
   </mat-step>

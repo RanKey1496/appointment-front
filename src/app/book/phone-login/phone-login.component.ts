@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WindowService } from 'src/app/window.service';
-import { Auth, signInWithPhoneNumber, RecaptchaVerifier, } from "@angular/fire/auth";
 import { AbstractControl, FormControl } from '@angular/forms';
 import { AppointmentService } from 'src/app/appointment.service';
 import { AuthService } from 'src/app/auth.service';
@@ -12,49 +11,48 @@ import { AuthService } from 'src/app/auth.service';
 })
 export class PhoneLoginComponent {
 
-  windowRef: any;
   @Input() phoneNumber: AbstractControl | null = null;
   code = new FormControl();
   codeSent = false;
   resendCodeTime: string = '';
   invalidCode: boolean = false;
   @Output() verified = new EventEmitter();
+  details: string = '';
 
-  constructor(private win: WindowService, private auth: Auth,
-      private appointmentService: AppointmentService, private authService: AuthService) { }
-
-  ngOnInit() {
-    this.windowRef = this.win.windowRef;
-  }
+  constructor(private win: WindowService, private appointmentService: AppointmentService,
+    private authService: AuthService) { }
 
   sendLoginCode() {
     this.codeSent = true;
     this.invalidCode = false;
-    this.windowRef.recaptchaVerifier = this.windowRef.recaptchaVerifier ?
-      this.windowRef.recaptchaVerifier : new RecaptchaVerifier(this.auth, 'recaptcha-container', { size: 'invisible' });
+    this.code.setValue('');
 
-    const formattedPhone = `+57${this.phoneNumber?.value}`
-    signInWithPhoneNumber(this.auth, formattedPhone, this.windowRef.recaptchaVerifier)
-      .then((result: any) => {
-        this.windowRef.confirmationResult = result;
-        setTimeout(() => {
-          this.resendCodeTimer(1);
-        }, 10000);
-      })
-      .catch((error: any) => console.log('Error sending Login Code', error))
+    const formattedPhone = `+57${this.phoneNumber?.value}`;
+
+    try {
+      this.appointmentService.sendOTP(formattedPhone).subscribe((data) => {
+        this.details = data.data;
+      });
+    } finally {
+      setTimeout(() => {
+        this.resendCodeTimer(1);
+      }, 10000);
+    }
   }
 
   verifyLoginCode() {
-    this.windowRef.confirmationResult
-      .confirm(this.code?.value)
-      .then((result: any) => {
-        this.authService.loginUserWithFirebaseToken(result.user.accessToken);
-        this.verified.emit({ firebaseUid: result.user?.uid, accessToken: result.user.accessToken });
-      })
-      .catch((error: any) => {
-        console.log('Error verifying Login Code', error);
-        this.invalidCode = true;
-      });
+    this.codeSent = true;
+    this.appointmentService.verifyOTP(this.code.value, this.details).subscribe((data) => {
+      if (data.data !== null) {
+        this.authService.authenticateToken(data.data);
+      }
+      this.invalidCode = false;
+      this.verified.emit(this.details);
+    }, (error) => {
+      this.codeSent = true;
+      this.invalidCode = true;
+      this.code.setValue('');
+    });
   }
 
   resendCodeTimer(minute: number) {

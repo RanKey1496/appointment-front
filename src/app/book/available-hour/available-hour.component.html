@@ -1,12 +1,15 @@
 <div fxLayout="row" fxFlexFill>
-  <div fxLayout="column" fxFlexFill>
+  <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
     <div fxLayout="row" fxLayoutAlign="center center">
       <h4>Horas disponibles</h4>
     </div>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <h6 class="primary text-center">Puedes elegir entre seleccionar a que horas quieres comenzar el servicio o si prefieres definir una hora para finalizar y nosotros calculamos a que horas tendrías que iniciar.</h6>
+    </div>
     <mat-tab-group (selectedTabChange)="tabSelected($event)" fxFlexFill>
-      <mat-tab label="Iniciar a las" fxFlexFill>
+      <mat-tab label="Empezar a las" fxFlexFill>
         <div fxLayout="row" fxLayoutAlign="center center">
-          <h4 class="warning mt">Quiero iniciar el servicio a esta hora:</h4>
+          <h5 class="warning mt text-center">Quiero iniciar el servicio a esta hora:</h5>
         </div>
         <mat-grid-list cols="3" rowHeight="50px" fxFlexFill>
           <mat-grid-tile *ngFor="let hour of availableHours; let i = index;"
@@ -21,9 +24,9 @@
           </mat-grid-tile>
         </mat-grid-list>
       </mat-tab>
-      <mat-tab label="Finalizar a las" fxFlexFill>
+      <mat-tab label="Estar list@ a las" fxFlexFill>
         <div fxLayout="row" fxLayoutAlign="center center">
-          <h4 class="warning mt">Quiero finalizar el servicio a esta hora:</h4>
+          <h5 class="warning mt text-center">Quiero finalizar el servicio a esta hora:</h5>
         </div>
         <mat-grid-list cols="3" rowHeight="50px">
           <mat-grid-tile *ngFor="let hour of availableHours; let i = index;"

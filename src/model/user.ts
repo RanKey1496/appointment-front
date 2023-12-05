@@ -2,7 +2,7 @@ export class User {
   name!: string;
   phone!: string;
   instagram!: string;
-  firebaseUid!: string;
+  details!: string;
   createdAt!: Date;
   updatedAt!: Date;
 }

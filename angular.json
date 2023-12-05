@@ -31,7 +31,8 @@
             ],
             "styles": [
               "src/custom-theme.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/flag-icon-css/css/flag-icons.min.css"
             ],
             "scripts": []
           },

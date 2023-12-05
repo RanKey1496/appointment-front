@@ -30,6 +30,8 @@ export class AuthService {
     try {
       this.appointmentService.authenticate(token).subscribe((data) => {
         this.setLoggedInUser(data.data);
+        this.setLoggedInToken(token);
+        this.logger.next(true);
       })
     } catch (error) {
       console.log('Unable to authenticate token');
@@ -40,7 +42,12 @@ export class AuthService {
     if (localStorage.getItem('userData') !== JSON.stringify(userData)) {
       localStorage.setItem('userData', JSON.stringify(userData));
     }
-    this.logger.next(true);
+  }
+
+  setLoggedInToken(token: string): void {
+    if (localStorage.getItem('token') !== token) {
+      localStorage.setItem('token', token);
+    }
   }
 
   isAuthenticatedUser() {

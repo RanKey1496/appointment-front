@@ -47,4 +47,14 @@ export class AppointmentService {
     return this.http.get(url);
   }
 
+  sendOTP(phone: string): Observable<any> {
+    const url = `${this.appointmentServiceURL}/phone/OTP`;
+    return this.http.post(url, { phone });
+  }
+
+  verifyOTP(code: string, details: string): Observable<any> {
+    const url = `${this.appointmentServiceURL}/verify/OTP`;
+    return this.http.post(url, { code, details });
+  }
+
 }
