@@ -16,7 +16,7 @@ export class AvailableHourComponent {
 
   hourClicked(value: any, index: number) {
     this.hourIndexClicked = index;
-    this.showResult.emit(value)
+    this.showResult.emit(value);
   }
 
   tabSelected($event: any) {

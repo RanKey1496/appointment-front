@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Book } from 'src/model/book';
 import { User } from 'src/model/user';
 
 @Injectable({
@@ -55,6 +56,11 @@ export class AppointmentService {
   verifyOTP(code: string, details: string): Observable<any> {
     const url = `${this.appointmentServiceURL}/verify/OTP`;
     return this.http.post(url, { code, details });
+  }
+
+  book(book: Book): Observable<any> {
+    const url = `${this.appointmentServiceURL}/book`;
+    return this.http.post(url, book, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
   }
 
 }

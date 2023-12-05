@@ -137,7 +137,7 @@
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
         <button mat-raised-button matStepperPrevious>Atrás</button>
-        <button mat-raised-button class="ml" color="warn" matStepperNext>Siguiente</button>
+        <button mat-raised-button class="ml" color="warn" matStepperNext (click)="putFieldsAsValid()">Siguiente</button>
       </div>
     </div>
   </mat-step>
@@ -190,6 +190,9 @@
             <h6 class="warning">(20% del total)</h6>
           </div>
         </div>
+      </div>
+      <div fxLayout="row" class="mt" fxFlexFill *ngIf="!confirmBookError">
+        <h4 class="warning text-center">No se pudo guardar la información de la cita, intenta nuevamente</h4>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
         <button mat-raised-button matStepperPrevious>Atrás</button>

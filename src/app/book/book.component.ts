@@ -15,6 +15,7 @@ import { ConfirmComponent } from './confirm/confirm.component';
 import { PaymentTransferMethodComponent } from './payment-transfer-method/payment-transfer-method.component';
 import { MatInput } from '@angular/material/input';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { Book } from 'src/model/book';
 
 @Component({
   selector: 'app-book',
@@ -36,6 +37,8 @@ export class BookComponent {
   availableHours: string[] = [];
   unavailableHours: boolean = false;
   resultTotal: any;
+  selectedHour!: any;
+  confirmBookError = false;
 
   @ViewChild('bookAvailableHours') bookAvailableHours: any;
   scheduleFormGroup = this.formBuilder.group({
@@ -48,9 +51,9 @@ export class BookComponent {
   userFormGroup = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(5)]],
     phone: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
-    instagram: [''],
+    instagram: ['', [Validators.minLength(4)]],
     phoneVerified: [false, [Validators.requiredTrue]],
-    details: [''],
+    details: ['', [Validators.minLength(1)]],
     privacyAcceptance: [false, [Validators.requiredTrue]]
   });
   user!: { isAuthenticated: boolean, userData: any };
@@ -201,6 +204,7 @@ export class BookComponent {
       this.resultTotal = this.generateTotal(duration, startDate, endDate);
     }
     this.scheduleFormGroup.get('filled')?.setValue(true);
+    this.selectedHour = time;
   }
 
   modifyAddedServicesQuantity(data: { event: string, id: number }) {
@@ -228,6 +232,9 @@ export class BookComponent {
     this.userFormGroup.get('phone')?.disable();
   }
 
+  putFieldsAsValid() {
+  }
+
   saveNewUser() {
     if (!this.userFormGroup.valid) return;
     this.signUpError = false;
@@ -251,13 +258,40 @@ export class BookComponent {
     }
   }
 
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.userFormGroup.controls;
+    for (const name in controls) {
+        if (this.userFormGroup.get(name)?.valid) {
+            invalid.push(name);
+        }
+    }
+    return invalid;
+  }
+
+  saveBookData() {
+    const book = new Book();
+    book.services = this.addedServices;
+    book.hour = this.selectedHour.format();
+
+    this.appointmentService.book(book).subscribe((data) => {
+      if (data.data) {
+        this.stepper.next();
+        this.editable = false;
+        this.confirmBookError = false;
+      }
+    }, (error) => {
+      this.confirmBookError = true;
+    });
+  }
+
   areYouSure() {
     const dialogRef = this.dialog.open(ConfirmComponent, {});
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log('resultado', result)
       if (!result) return;
-      this.stepper.next();
-      this.editable = false;
+      this.saveBookData();
     });
   }
 
