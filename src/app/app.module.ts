@@ -48,6 +48,7 @@ import { TokenInterceptor } from './token.interceptor';
 import { ConfirmComponent } from './book/confirm/confirm.component';
 import { PaymentTransferMethodComponent } from './book/payment-transfer-method/payment-transfer-method.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { WhatsappComponent } from './whatsapp/whatsapp.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     PhoneLoginComponent,
     SpinnerComponent,
     ConfirmComponent,
-    PaymentTransferMethodComponent
+    PaymentTransferMethodComponent,
+    WhatsappComponent
   ],
   imports: [
     HttpClientModule,

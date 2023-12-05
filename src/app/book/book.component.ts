@@ -258,20 +258,9 @@ export class BookComponent {
     }
   }
 
-  public findInvalidControls() {
-    const invalid = [];
-    const controls = this.userFormGroup.controls;
-    for (const name in controls) {
-        if (this.userFormGroup.get(name)?.valid) {
-            invalid.push(name);
-        }
-    }
-    return invalid;
-  }
-
   saveBookData() {
     const book = new Book();
-    book.services = this.addedServices;
+    book.services = this.addedServices.map((s: any) => s.id);
     book.hour = this.selectedHour.format();
 
     this.appointmentService.book(book).subscribe((data) => {
