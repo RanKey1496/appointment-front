@@ -1,4 +1,4 @@
 export class Book {
-  services!: any[];
+  serviceIds!: number[];
   hour!: string;
 }

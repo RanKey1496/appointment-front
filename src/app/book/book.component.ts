@@ -59,6 +59,7 @@ export class BookComponent {
   user!: { isAuthenticated: boolean, userData: any };
 
   editable: boolean = true;
+  orderId!: number;
 
   paymentFormGroup = this.formBuilder.group({
 
@@ -260,7 +261,7 @@ export class BookComponent {
 
   saveBookData() {
     const book = new Book();
-    book.services = this.addedServices.map((s: any) => s.id);
+    book.serviceIds = this.addedServices.map((s: any) => s.id);
     book.hour = this.selectedHour.format();
 
     this.appointmentService.book(book).subscribe((data) => {
@@ -268,6 +269,7 @@ export class BookComponent {
         this.stepper.next();
         this.editable = false;
         this.confirmBookError = false;
+        this.orderId = data.data.id;
       }
     }, (error) => {
       this.confirmBookError = true;
@@ -286,7 +288,7 @@ export class BookComponent {
 
   openPaymentTransfer(method: string) {
     const dialogRef = this.dialog.open(PaymentTransferMethodComponent, {
-      data: { method }
+      data: { method, advancePayment: this.getPriceTotal() * 0.2 }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -296,6 +298,6 @@ export class BookComponent {
   }
 
   sendToWhatsapp() {
-    window.open('https://api.whatsapp.com/send?phone=573122818064&text=Hola%2C%20mi%20nombre%20es%20%E2%9C%A8Jhon%20Gil%E2%9C%A8%20y%20realic%C3%A9%20el%20pago%20del%20anticipo%20para%20confirmar%20la%20cita%20*123*%20por%20un%20valor%20de%20%2420.000%0AAdjunto%20comprobante%20%E2%9C%85', '_blank');
+    window.open(`https://api.whatsapp.com/send?phone=573122818064&text=Hola%2C%20mi%20nombre%20es%20${this.user.userData.name}%20y%20realic%C3%A9%20el%20pago%20del%20anticipo%20para%20confirmar%20la%20cita%20${this.orderId}%20por%20un%20valor%20de%20%24${this.getPriceTotal() * 0.2}%0AAdjunto%20comprobante`, '_blank');
   }
 }

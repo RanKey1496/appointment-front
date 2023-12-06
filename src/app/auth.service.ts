@@ -32,10 +32,18 @@ export class AuthService {
         this.setLoggedInUser(data.data);
         this.setLoggedInToken(token);
         this.logger.next(true);
-      })
+      }, (error) => {
+        this.removeLoggedIn();
+      });
     } catch (error) {
       console.log('Unable to authenticate token');
+      this.removeLoggedIn();
     }
+  }
+
+  removeLoggedIn(): void {
+    localStorage.removeItem('userData');
+    localStorage.removeItem('token');
   }
 
   setLoggedInUser(userData: any): void {
@@ -51,6 +59,8 @@ export class AuthService {
   }
 
   isAuthenticatedUser() {
+    const token = localStorage.getItem('token');
+    if (!token) return { isAuthenticated: false, userData: null };
     const userData: string | null = localStorage.getItem('userData') ? JSON.parse(String(localStorage.getItem('userData'))) : null;
     return {
       isAuthenticated: !!localStorage.getItem('token'),

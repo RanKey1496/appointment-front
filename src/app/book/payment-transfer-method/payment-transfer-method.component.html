@@ -1,17 +1,20 @@
 <div mat-dialog-content>
     <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
         <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-            <img class="mt" mat-dialog-title [src]="method.logo">           
+            <img class="mt" mat-dialog-title [src]="method.logo">
         </div>
         <div fxLayout="row" class="mt" fxFlexFill>
-            <h4>{{ method.account }}</h4>
+            <h4>Número: <strong>{{ method.account }}</strong></h4>
         </div>
         <div fxLayout="row" *ngIf="method.accountType" fxFlexFill>
-            <h4>{{ method.accountType }}</h4>
+            <h4>Tipo: <strong>{{ method.accountType }}</strong></h4>
         </div>
-        <div>
+        <div fxLayout="row" fxFlexFill>
             <img [src]="method.qrCode">
         </div>
+        <div fxLayout="row" class="mt" fxFlexFill>
+          <h4>Valor del anticipo: <strong>{{ advancePayment | currency : 'COP' : '$' : '3.0' }}</strong> (20% del total)</h4>
+      </div>
     </div>
 </div>
 <div mat-dialog-actions>

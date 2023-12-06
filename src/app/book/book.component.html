@@ -96,9 +96,10 @@
         </mat-form-field>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill *ngIf="userFormGroup.get('phoneVerified')?.value">
-        <mat-form-field fxFlexFill>
+        <mat-form-field fxFlexFill floatLabel="always">
           <mat-label>Instagram</mat-label>
-          <input matInput formControlName="instagram" prefix="@ " placeholder="Usuario de instagram">
+          <span matTextPrefix>@&nbsp;</span>
+          <input matInput formControlName="instagram" placeholder="Usuario de instagram">
         </mat-form-field>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
@@ -191,7 +192,7 @@
           </div>
         </div>
       </div>
-      <div fxLayout="row" class="mt" fxFlexFill *ngIf="!confirmBookError">
+      <div fxLayout="row" class="mt" fxFlexFill *ngIf="confirmBookError">
         <h4 class="warning text-center">No se pudo guardar la información de la cita, intenta nuevamente</h4>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt">
@@ -204,12 +205,6 @@
   <!-- Payment form -->
   <mat-step [stepControl]="paymentFormGroup" label="Pago del servicio">
     <div fxLayout="column" fxFlexFill>
-      <div fxLayout="row" class="mt" fxLayoutAlign="center center" fxFlexFill>
-        <h5>Para poder confirmar la cita, debes realizar el pago del anticipo (20% del total)</h5>
-      </div>
-      <div fxLayout="row" fxFlexFill>
-        <h6 class="warning">Hasta que no se realice el pago no se garantizará que la cita está confirmada y los horarios podrán ser tomados por otro usuario en cualquier momento</h6>
-      </div>
       <div fxLayout="row" fxFlexFill>
         <mat-accordion class="mt">
           <mat-expansion-panel>
@@ -247,6 +242,12 @@
               </div>
               <div fxLayout="row" class="mt" fxFlexFill>
                 <h6>Envía el comprobante de pago a Whatsapp para verificar la transacción (Esto puede tardar un momento)</h6>
+              </div>
+              <div fxLayout="row" fxFlexFill>
+                <h6 class="warning">Hasta que no se realice el pago no se garantizará que la cita está confirmada y los horarios podrán ser tomados por otro usuario en cualquier momento</h6>
+              </div>
+              <div fxLayout="row" fxFlexFill>
+                <h6 class="warning">Las citas sin pagar el anticipo, serán automaticamente canceladas por el sistema despues de 1 hr</h6>
               </div>
             </div>
           </mat-expansion-panel>

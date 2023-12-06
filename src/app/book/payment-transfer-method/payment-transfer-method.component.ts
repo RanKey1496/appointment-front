@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class PaymentTransferMethodComponent {
 
   method: any = null;
+  advancePayment!: number;
 
   methods = [
     {
@@ -32,6 +33,7 @@ export class PaymentTransferMethodComponent {
   constructor(public dialogRef: MatDialogRef<PaymentTransferMethodComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
       this.method = this.methods.find(x => x.id === data.method);
+      this.advancePayment = data.advancePayment;
     }
 
   close() {
@@ -41,5 +43,5 @@ export class PaymentTransferMethodComponent {
   paid() {
     this.dialogRef.close(true);
   }
-  
+
 }

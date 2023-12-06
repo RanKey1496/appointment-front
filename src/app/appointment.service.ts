@@ -59,7 +59,7 @@ export class AppointmentService {
   }
 
   book(book: Book): Observable<any> {
-    const url = `${this.appointmentServiceURL}/book`;
+    const url = `${this.appointmentServiceURL}/book/order`;
     return this.http.post(url, book, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
   }
 
